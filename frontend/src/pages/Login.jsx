@@ -164,6 +164,29 @@ export default function Login({ onLogin }) {
             {isLoading ? 'Authenticating...' : 'Access Dashboard'}
             {!isLoading && <ArrowRight size={18} />}
           </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              localStorage.setItem('API_KEY', 'demo_admin');
+              onLogin('demo_admin');
+            }}
+            className="btn btn-secondary"
+            style={{
+              width: '100%',
+              padding: '0.85rem',
+              fontSize: '0.9rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.5rem',
+              border: '1px solid var(--border-subtle)',
+              background: 'rgba(255, 255, 255, 0.03)',
+              color: 'var(--text-secondary)'
+            }}
+          >
+            Quick Access (Demo Mode)
+          </button>
         </form>
       </div>
     </div>
