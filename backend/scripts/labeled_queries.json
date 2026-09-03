@@ -1,0 +1,15 @@
+{
+  "_note": "Relevance proxy: a returned event counts as relevant if its caption contains any of `relevant_keywords` (case-insensitive substring, whole-word). This is a weak proxy (not human-verified ground truth) because captions are generated at index time by Florence-2 and aren't known until you run the pipeline. Good enough to compare vector-only vs hybrid RRF on the SAME index; not good enough to claim absolute retrieval quality without manual spot-checking of ~10 results.",
+  "queries": [
+    {"query": "black suv", "relevant_keywords": ["suv", "vehicle", "car"]},
+    {"query": "vehicle in parking lot", "relevant_keywords": ["suv", "vehicle", "car", "garage", "parking"]},
+    {"query": "people crossing zebra crossing", "relevant_keywords": ["crossing", "pedestrian", "zebra"]},
+    {"query": "pedestrians with backpacks", "relevant_keywords": ["backpack", "bag", "pedestrian"]},
+    {"query": "supermarket aisle shelves", "relevant_keywords": ["aisle", "shelves", "supermarket", "store"]},
+    {"query": "cash register counter", "relevant_keywords": ["register", "checkout", "counter"]},
+    {"query": "person running", "relevant_keywords": ["running", "sprinting", "fleeing"]},
+    {"query": "empty garage no cars", "relevant_keywords": ["garage", "empty", "no vehicle", "no car"]},
+    {"query": "person carrying luggage", "relevant_keywords": ["luggage", "bag", "backpack"]},
+    {"query": "dog near entrance", "relevant_keywords": ["dog", "canine", "entrance", "door"]}
+  ]
+}
