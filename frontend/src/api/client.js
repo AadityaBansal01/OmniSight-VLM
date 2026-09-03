@@ -82,4 +82,12 @@ const apiClient = {
   }
 };
 
+export function mediaUrl(path) {
+  if (!path) return '';
+  const key = localStorage.getItem('API_KEY') || import.meta.env?.VITE_API_KEY;
+  if (!key) return path;
+  const separator = path.includes('?') ? '&' : '?';
+  return `${path}${separator}api_key=${encodeURIComponent(key)}`;
+}
+
 export default apiClient;

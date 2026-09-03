@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
-import { Search, ChevronRight, UploadCloud, Menu } from 'lucide-react';
+import { Search, ChevronRight, UploadCloud, Menu, Lock } from 'lucide-react';
 
 export default function Header({ setMobileMenuOpen }) {
   const location = useLocation();
@@ -37,7 +37,7 @@ export default function Header({ setMobileMenuOpen }) {
         >
           <Menu size={18} />
         </button>
-        <span>Sentinel Enterprise</span>
+        <span>OmniSight Enterprise</span>
         <ChevronRight size={14} style={{ opacity: 0.4 }} />
         <span className="current">{getPageTitle(location.pathname)}</span>
       </div>
@@ -82,6 +82,18 @@ export default function Header({ setMobileMenuOpen }) {
         >
           <UploadCloud size={14} />
           <span>Upload</span>
+        </button>
+
+        <button 
+          className="btn btn-ghost btn-sm"
+          onClick={() => {
+            localStorage.removeItem('API_KEY');
+            window.dispatchEvent(new Event('auth_required'));
+          }}
+          title="Lock Surveillance Terminal (Passkey 2006A)"
+          style={{ padding: '0.4rem 0.5rem', color: 'var(--text-muted)' }}
+        >
+          <Lock size={13} />
         </button>
       </div>
     </header>

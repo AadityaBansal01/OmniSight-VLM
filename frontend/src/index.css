@@ -158,7 +158,10 @@ input, select, textarea {
   display: flex;
   width: 100%;
   min-height: 100vh;
-  background: var(--bg-base);
+  background: #08090d;
+  background-image: 
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(99, 102, 241, 0.07), transparent 70%),
+    radial-gradient(circle at 90% 90%, rgba(16, 185, 129, 0.04), transparent 50%);
 }
 
 .main-content {
@@ -166,7 +169,7 @@ input, select, textarea {
   display: flex;
   flex-direction: column;
   min-width: 0;
-  background: var(--bg-base);
+  background: transparent;
 }
 
 .page-container {
@@ -390,21 +393,24 @@ input, select, textarea {
 
 /* ─── Enterprise Cards & Panels ──────────────────────────── */
 .card {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
+  background: rgba(14, 17, 26, 0.72);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 8px 32px rgba(0, 0, 0, 0.45);
   overflow: hidden;
-  transition: border-color var(--ease-fast), box-shadow var(--ease-fast);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .card:hover {
-  border-color: var(--border-default);
+  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 12px 40px rgba(0, 0, 0, 0.6);
 }
 
 .card-header {
   padding: 0.9rem 1.25rem;
-  border-bottom: 1px solid var(--border-subtle);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -433,20 +439,24 @@ input, select, textarea {
 
 /* ─── Metric & KPI Cards ─────────────────────────────────── */
 .kpi-card {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
+  background: rgba(14, 17, 26, 0.75);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-lg);
-  padding: 1.25rem;
+  padding: 1.35rem;
   display: flex;
   flex-direction: column;
   gap: 0.65rem;
   position: relative;
-  transition: all var(--ease-fast);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 4px 20px rgba(0, 0, 0, 0.35);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .kpi-card:hover {
-  border-color: var(--border-hover);
-  background: var(--bg-surface-elevated);
+  transform: translateY(-2px);
+  border-color: rgba(129, 140, 248, 0.35);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 12px 32px rgba(0, 0, 0, 0.5), 0 0 20px rgba(99, 102, 241, 0.12);
 }
 
 .kpi-header {
@@ -523,12 +533,19 @@ input, select, textarea {
   background: #ffffff;
   color: #09090b;
   border: 1px solid #ffffff;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 12px rgba(255, 255, 255, 0.18);
+  font-weight: 600;
 }
 
 .btn-primary:hover {
-  background: #e4e4e7;
-  border-color: #e4e4e7;
+  background: #f4f4f5;
+  border-color: #f4f4f5;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 18px rgba(255, 255, 255, 0.28);
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
 }
 
 .btn-primary:disabled {
@@ -624,29 +641,32 @@ input, select, textarea {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   color: var(--text-secondary);
   font-size: 0.775rem;
   font-weight: 500;
-  padding: 0.35rem 0.75rem;
+  padding: 0.35rem 0.8rem;
   border-radius: var(--radius-full);
   cursor: pointer;
   transition: all var(--ease-fast);
   user-select: none;
+  backdrop-filter: blur(8px);
 }
 
 .filter-chip:hover {
-  background: var(--bg-surface-hover);
-  color: var(--text-primary);
-  border-color: var(--border-default);
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
 }
 
 .filter-chip.active {
-  background: #ffffff;
-  color: #09090b;
-  border-color: #ffffff;
+  background: rgba(99, 102, 241, 0.18);
+  color: #c7d2fe;
+  border-color: rgba(129, 140, 248, 0.5);
   font-weight: 600;
+  box-shadow: 0 0 16px rgba(99, 102, 241, 0.25);
 }
 
 /* ─── Status Badges ──────────────────────────────────────── */
@@ -697,20 +717,23 @@ input, select, textarea {
 
 /* ─── Video & Result Cards ───────────────────────────────── */
 .video-card {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
+  background: rgba(14, 17, 26, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-md);
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: all var(--ease-fast);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, box-shadow 0.25s ease;
   cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
 }
 
 .video-card:hover {
-  border-color: var(--border-hover);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+  border-color: rgba(129, 140, 248, 0.4);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6), 0 0 24px rgba(99, 102, 241, 0.15);
 }
 
 .video-thumb-wrap {
@@ -725,13 +748,13 @@ input, select, textarea {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.9;
-  transition: opacity var(--ease-fast), transform var(--ease-normal);
+  opacity: 0.92;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
 }
 
 .video-card:hover .video-thumb-img {
   opacity: 1;
-  transform: scale(1.02);
+  transform: scale(1.06);
 }
 
 .video-thumb-overlay {

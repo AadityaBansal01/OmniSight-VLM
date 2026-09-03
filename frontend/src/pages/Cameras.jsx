@@ -86,8 +86,8 @@ export default function Cameras() {
     const xhr = new XMLHttpRequest();
     xhr.open('POST', '/api/v1/videos/upload', true);
     
-    // Add API key if it exists in env
-    const apiKey = import.meta.env?.VITE_API_KEY;
+    // Add API key from localStorage (e.g. 2006A) or env
+    const apiKey = localStorage.getItem('API_KEY') || import.meta.env?.VITE_API_KEY;
     if (apiKey) {
       xhr.setRequestHeader('X-API-Key', apiKey);
     }

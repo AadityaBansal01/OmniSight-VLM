@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import apiClient from '../api/client';
+import apiClient, { mediaUrl } from '../api/client';
 import { 
   Search as SearchIcon, 
   LayoutGrid, 
@@ -138,7 +138,7 @@ export default function Search() {
   const exportEvidence = () => {
     if (!results || results.length === 0) return;
     const manifest = {
-      export_title: "Sentinel CCTV Forensic Intelligence Manifest",
+      export_title: "OmniSight VLM Forensic Intelligence Manifest",
       timestamp: new Date().toISOString(),
       query: query || "ALL_INDEXED_EVENTS",
       confidence_threshold: `${threshold}%`,
@@ -357,7 +357,7 @@ export default function Search() {
             </div>
 
             <div style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)' }}>
-              Inference: {searchTimeMs}ms • Vision AI + Semantic Search
+              Response: {searchTimeMs > 0 ? `${(searchTimeMs / 1000).toFixed(3)}s` : '<0.05s'} • Neural Semantic Index
             </div>
           </div>
 
@@ -433,7 +433,7 @@ export default function Search() {
           <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
             <span>Showing <strong style={{ color: 'var(--text-primary)' }}>{results.length}</strong> matching clips</span>
             <span className="status-badge status-badge-neutral" style={{ fontSize: '0.7rem', border: '1px solid var(--border-subtle)' }}>
-              ⚡ Hybrid Dense + Lexical Fusion (&lt;80ms)
+              ⚡ Real-Time Neural Retrieval (&lt;0.08s SLA)
             </span>
           </div>
         </div>
@@ -457,7 +457,7 @@ export default function Search() {
                     <Video size={32} style={{ color: 'var(--text-faint)' }} />
                   </div>
                   <img 
-                    src={`/api/v1/videos/${r.video_id}/thumbnail?t=${r.timestamp}`} 
+                    src={mediaUrl(`/api/v1/videos/${r.video_id}/thumbnail?t=${r.timestamp}`)} 
                     alt="Detected event keyframe" 
                     className="video-thumb-img"
                     style={{ position: 'relative', zIndex: 1 }}
@@ -717,7 +717,7 @@ export default function Search() {
 
             <div style={{ background: '#000000', position: 'relative', width: '100%', aspectRatio: '16/9' }}>
               <video
-                src={`/api/v1/videos/${previewEvent.video_id}/stream`}
+                src={mediaUrl(`/api/v1/videos/${previewEvent.video_id}/stream`)}
                 controls
                 autoPlay
                 onLoadedMetadata={(e) => {
