@@ -1,0 +1,32 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - cctv_data:/app/data
+      - chroma_cache:/root/.cache/chroma
+      - hf_cache:/root/.cache/huggingface
+    environment:
+      - CORS_ORIGINS=http://localhost,http://localhost:5173,http://127.0.0.1
+      - CCTV_API_KEY=${CCTV_API_KEY:-}
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "80:80"
+      - "5173:80" # Map 5173 to 80 as well so local dev URLs still work seamlessly
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  cctv_data:
+    name: cctv_data_volume
+  chroma_cache:
+    name: chroma_cache_volume
+  hf_cache:
+    name: hf_cache_volume
