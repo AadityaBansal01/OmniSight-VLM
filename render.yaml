@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: omnisight-vlm
+    env: docker
+    dockerfilePath: Dockerfile
+    plan: starter
+    envVars:
+      - key: CCTV_API_KEY
+        value: 2006A
+      - key: CORS_ORIGINS
+        value: "*"

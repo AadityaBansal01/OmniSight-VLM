@@ -1,8 +1,18 @@
-# OmniSight
+---
+title: OmniSight VLM
+emoji: 👁️
+colorFrom: indigo
+colorTo: blue
+sdk: docker
+app_port: 7860
+pinned: false
+---
 
-**OmniSight** is a local-first, multimodal semantic search engine for surveillance cameras. 
+# OmniSight VLM
 
-It allows you to search through hours of RTSP video footage using natural language queries like *"person wearing a red shirt"* or *"black car pulling into the driveway"*. Rather than relying on simple motion alerts or manual tagging, OmniSight translates video pixels into a searchable semantic space in real-time.
+**OmniSight VLM** is an edge-optimized, multimodal semantic search engine and video-RAG platform for surveillance cameras. 
+
+It allows operators to search through hours of CCTV footage using natural language queries like *"person wearing a red shirt"* or *"black SUV pulling into the driveway"*. Rather than relying on simple motion alerts or manual tagging, OmniSight translates physical surveillance video into a searchable semantic latent space in real-time.
 
 ---
 
@@ -44,7 +54,26 @@ flowchart LR
 
 ---
 
-## Getting Started
+## Deployment & Hosting
+
+### 🌐 24/7 Cloud Hosting (Permanent Live URL)
+
+#### 1. Hugging Face Spaces (100% Free 16GB RAM Container)
+1. Go to [huggingface.co/new-space](https://huggingface.co/new-space).
+2. Set Space Name: `omnisight-vlm`.
+3. Choose **Docker** SDK (Blank).
+4. Connect or push your repository: `https://github.com/AadityaBansal01/OmniSight-VLM`.
+5. Hugging Face will automatically detect the root `Dockerfile` and expose your application at:
+   `https://<your-username>-omnisight-vlm.hf.space` with 16GB of dedicated RAM.
+
+#### 2. Render.com / Railway (1-Click Docker Blueprint)
+1. Connect your GitHub repository to [Render.com](https://render.com).
+2. Click **New +** → **Blueprint** → Select `AadityaBansal01/OmniSight-VLM`.
+3. Render automatically reads `render.yaml` and launches the unified production container.
+
+---
+
+## Getting Started (Local Development)
 
 ### Quickstart with Docker Compose (Recommended)
 
@@ -55,6 +84,7 @@ docker compose up --build
 ```
 - **Web Interface**: `http://localhost:5173` (or `http://localhost`)
 - **API Documentation**: `http://localhost:8000/docs`
+- **System Passkey**: `2006A`
 
 ---
 
