@@ -3,7 +3,7 @@ services:
     name: omnisight-vlm
     env: docker
     dockerfilePath: Dockerfile
-    plan: starter
+    plan: free
     envVars:
       - key: CCTV_API_KEY
         value: 2006A
