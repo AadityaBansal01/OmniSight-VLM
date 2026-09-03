@@ -10,7 +10,7 @@ services:
       - hf_cache:/root/.cache/huggingface
     environment:
       - CORS_ORIGINS=http://localhost,http://localhost:5173,http://127.0.0.1
-      - CCTV_API_KEY=${CCTV_API_KEY:-}
+      - CCTV_API_KEY=${CCTV_API_KEY:-2006A}
     restart: unless-stopped
 
   frontend:

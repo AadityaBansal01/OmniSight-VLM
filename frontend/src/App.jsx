@@ -11,7 +11,9 @@ import Login from './pages/Login';
 
 export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    () => localStorage.getItem('API_KEY') === '2006A'
+  );
 
   useEffect(() => {
     const handleAuthRequired = () => {
