@@ -152,6 +152,7 @@ def semantic_search(
     camera_id: Optional[str] = Query(None),
     video_id: Optional[str] = Query(None),
     min_score: float = Query(0.0, ge=0.0, le=100.0),
+    deduplicate: bool = Query(True, description="Enable temporal non-maximum suppression to cluster adjacent frames"),
     time_from: Optional[float] = Query(None, description="Min timestamp in seconds"),
     time_to: Optional[float] = Query(None, description="Max timestamp in seconds"),
     n_results: int = Query(10, ge=1, le=50),
@@ -170,6 +171,7 @@ def semantic_search(
         video_id=video_id,
         camera_id=camera_id,
         min_score=min_score,
+        deduplicate_window_sec=6.0 if deduplicate else 0.0,
     )
 
     # Post-filter by time range

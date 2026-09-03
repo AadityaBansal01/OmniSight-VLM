@@ -68,6 +68,12 @@ def _compute_lexical_score(query: str, caption: str) -> float:
     return (matches / total_weight) * 100.0
 
 
+_COLOR_WORDS = {
+    "yellow", "blue", "red", "green", "black", "white", "orange",
+    "purple", "pink", "gray", "grey", "brown", "silver", "gold"
+}
+
+
 class VectorStore:
     """
     Manages ChromaDB persistent storage and neural semantic event retrieval.
@@ -172,12 +178,11 @@ class VectorStore:
         video_id: Optional[str] = None,
         camera_id: Optional[str] = None,
         min_score: float = 0.0,
+        deduplicate_window_sec: float = 6.0,
     ) -> List[Dict[str, Any]]:
         """
-        Hybrid Semantic + Lexical search over indexed events.
-        Ranks candidates independently by dense cosine similarity and by
-        lexical/synonym overlap, then fuses the two rankings with
-        Reciprocal Rank Fusion.
+        Hybrid Semantic + Lexical search over indexed events with
+        Temporal Non-Maximum Suppression (deduplication) and strict relevance gating.
         """
         self._ensure_initialized()
 
@@ -200,7 +205,7 @@ class VectorStore:
         # Fetch dense vector candidates
         results = self._collection.query(
             query_texts=[query],
-            n_results=min(n_results * 2, max(1, self._collection.count())),
+            n_results=min(n_results * 3, max(1, self._collection.count())),
             where=where_filter,
         )
 
@@ -217,6 +222,9 @@ class VectorStore:
         q_norm = np.linalg.norm(q_raw)
         q_emb = q_raw / (q_norm if q_norm > 0 else 1.0)
 
+        q_words = set(re.findall(r"[a-z0-9]+", query.lower()))
+        q_colors = q_words & _COLOR_WORDS
+
         candidates = []
         for doc, meta, dist in zip(docs, metas, distances):
             # Fine-grained clause-level MaxSim pooling across the document
@@ -228,7 +236,7 @@ class VectorStore:
             lex_s = _compute_lexical_score(query, doc)
 
             # True NLP Relevance Gating & Semantic Calibration
-            if max_sem < 22.0 and lex_s < 99.0:
+            if max_sem < 25.0 and lex_s < 90.0:
                 # Semantic distance too high and no exact keyword match -> irrelevant
                 final_score = 0.0
             else:
@@ -240,6 +248,10 @@ class VectorStore:
                     final_score = 0.6 * scaled_sem + 0.4 * lex_s
                 else:
                     final_score = scaled_sem
+
+                # Color qualifier strictness: if query explicitly specified a color, require it
+                if q_colors and not any(c in doc.lower() for c in q_colors):
+                    final_score *= 0.35
 
             match_score = round(min(100.0, max(0.0, final_score)), 1)
 
@@ -254,8 +266,29 @@ class VectorStore:
                 "match_score": match_score,
             })
 
-        formatted = [
-            {
+        # Effective minimum score floor: drop anything below threshold or 0.0
+        effective_min = max(35.0, min_score) if min_score <= 0.0 else min_score
+
+        # Sort candidates by match_score descending before deduplication
+        candidates.sort(key=lambda x: x["match_score"], reverse=True)
+
+        formatted = []
+        for c in candidates:
+            if c["match_score"] < effective_min or c["match_score"] <= 0.0:
+                continue
+
+            # Temporal Non-Maximum Suppression (deduplication):
+            # If an accepted event is from the same video within deduplicate_window_sec, suppress
+            if deduplicate_window_sec > 0:
+                is_suppressed = False
+                for accepted in formatted:
+                    if accepted["video_id"] == c["video_id"] and abs(accepted["timestamp"] - c["timestamp"]) < deduplicate_window_sec:
+                        is_suppressed = True
+                        break
+                if is_suppressed:
+                    continue
+
+            formatted.append({
                 "timestamp": c["timestamp"],
                 "time_str": c["time_str"],
                 "caption": c["caption"],
@@ -264,13 +297,11 @@ class VectorStore:
                 "camera_id": c["camera_id"],
                 "match_score": c["match_score"],
                 "bbox": c["bbox"],
-            }
-            for c in candidates
-            if c["match_score"] >= min_score
-        ]
+            })
+            if len(formatted) >= n_results:
+                break
 
-        formatted.sort(key=lambda x: x["match_score"], reverse=True)
-        return formatted[:n_results]
+        return formatted
 
     def delete_video_events(self, video_id: str):
         """Remove all events for a specific video from the vector store."""
